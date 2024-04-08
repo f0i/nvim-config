@@ -242,7 +242,7 @@ require('lazy').setup({
 
   { 'stevearc/oil.nvim', opts = {} },
 
-  { 'Pocco81/auto-save.nvim', opts = {} },
+  --{ 'Pocco81/auto-save.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -632,7 +632,6 @@ require('lazy').setup({
           end,
         },
       }
-
     end,
   },
 
@@ -641,44 +640,49 @@ require('lazy').setup({
     lazy = false,
     keys = {
       {
-        '<leader>f',
+        '<leader>=',
         function()
           require('conform').format { async = true, lsp_fallback = true }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = 'Format buffer',
       },
     },
     opts = {
+      log_level = vim.log.levels.DEBUG,
       notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
+        print 'asdf'
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
       formatters_by_ft = {
-          lua = { 'stylua'                      },
+        lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        javascript = { { "prettierd", "prettier" } },
+        javascript = { { 'prettierd', 'prettier' } },
         motoko = { 'prettier' },
       },
+      formatters = {
+        prettier = {
+          prepend_args = function(self, ctx)
+            return { '--plugin', 'prettier-plugin-motoko' }
+          end,
+        },
+      },
     },
-    config = function()
-      require('conform').formatters.prettier = {
-        prepend_args = function(self, ctx)
-          return { '--plugin', 'prettier-plugin-motoko' }
-        end,
-      }
-    end,
+    -- config = function()
+    --   print("config conform")
+    --   require('conform').    -- end,
   },
 
   { -- Autocompletion
