@@ -244,6 +244,16 @@ require('lazy').setup({
 
   --{ 'Pocco81/auto-save.nvim', opts = {} },
 
+  {
+    'JakobSachs/typing-metrics.nvim',
+    opts = {
+      display_mode = 'floating', -- Options: 'statusline', 'floating', 'overlay'
+      average_word_length = 5,
+      update_interval = 1000, -- In ms
+      privacy_mode = false,
+    },
+  },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -642,7 +652,7 @@ require('lazy').setup({
       {
         '<leader>=',
         function()
-          require('conform').format { async = true, lsp_fallback = true }
+          require('conform').format { async = true, lsp_fallback = false }
         end,
         mode = '',
         desc = 'Format buffer',
@@ -656,10 +666,9 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
-        print 'asdf'
         return {
           timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+          lsp_fallback = false,
         }
       end,
       formatters_by_ft = {
@@ -694,23 +703,18 @@ require('lazy').setup({
         'L3MON4D3/LuaSnip',
         build = (function()
           -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
           return 'make install_jsregexp'
         end)(),
         dependencies = {
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -837,7 +841,10 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      require('mini.pairs').setup()
+      -- Automatically add closing brackets, quotes, etc.
+      -- TODO: only add closing character if the opening one is followed by a whitespace
+      -- TODO: add }; for motoko files instead of only }
+      --require('mini.pairs').setup()
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
@@ -847,11 +854,13 @@ require('lazy').setup({
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
+      -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return '%2l:%-2v'
+        local wpm = require('typing-metrics').get_avg()
+        return '%2l:%-2v' .. ' ' .. wpm
       end
 
       -- ... and there is more!
@@ -944,6 +953,17 @@ parser_config.motoko = {
 }
 
 vim.filetype.add { extension = { mo = 'motoko' } }
+
+-- The following will add the additional suffixes, so imports without .mo can be followed with `gf`
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'motoko',
+  group = vim.api.nvim_create_augroup('motoko-autocommands', { clear = true }),
+  callback = function()
+    vim.opt.suffixesadd = '.mo'
+  end,
+})
+require('luasnip.loaders.from_vscode').load { paths = { '~/.config/nvim/snippets' } }
+
 vim.api.nvim_set_var('shell', 'bash')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
