@@ -412,12 +412,12 @@ require('lazy').setup({
           grep_open_files = true,
           prompt_title = 'Live Grep in Open Files',
         }
-      end, { desc = '[S]earch [/] in Open Files' })
+      end, { desc = '[F]ind [/] in Open Files' })
 
       -- Shortcut for searching your neovim configuration files
       vim.keymap.set('n', '<leader>fn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      end, { desc = '[F]ind [N]eovim files' })
 
       -- Shortcut for searching your keyboard configuration files
       vim.keymap.set('n', '<leader>fy', function()
@@ -431,7 +431,7 @@ require('lazy').setup({
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
-      'f0i/mason-lspconfig.nvim',
+      'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -582,9 +582,11 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {
-        motoko_lsp = {},
-        tsserver = {
+      local servers = {};
+      if vim.fn.executable 'npm' == 1 then
+        servers.motoko_lsp = {};
+
+        servers.tsserver = {
           init_options = {
             plugins = {
               {
@@ -594,19 +596,19 @@ require('lazy').setup({
               },
             },
           },
-        },
-        volar = {
+        };
+        servers.volar = {
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
           init_options = {
             vue = {
               hybridMode = false,
             },
           },
-        },
+        };
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
-        rust_analyzer = {},
+        servers.rust_analyzer = {};
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -615,8 +617,9 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
+      end
 
-        lua_ls = {
+        servers.lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
           -- capabilities = {},
@@ -629,8 +632,7 @@ require('lazy').setup({
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
-        },
-      }
+        };
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -994,7 +996,9 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 require('luasnip.loaders.from_vscode').load { paths = { '~/.config/nvim/snippets' } }
 
-vim.api.nvim_set_var('shell', 'bash')
-
+vim.filetype.add({
+        extension = { keymap = 'c' }
+})
+ 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
