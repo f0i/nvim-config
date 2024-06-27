@@ -167,6 +167,8 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+vim.keymap.set('n', 'gp', '<cmd>e %:h<CR>', { desc = '[G]oto [P]arent directory' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -240,7 +242,7 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
-  { 'stevearc/oil.nvim', opts = {} },
+  { 'stevearc/oil.nvim', opts = { view_options = { show_hidden = true } } },
 
   --{ 'Pocco81/auto-save.nvim', opts = {} },
 
@@ -700,13 +702,17 @@ require('lazy').setup({
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         javascript = { { 'prettierd', 'prettier' } },
-        motoko = { 'prettier' },
+        typescript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
+        json = { { 'prettierd', 'prettier' } },
+        motoko = { 'mo_fmt' },
       },
       formatters = {
-        prettier = {
-          prepend_args = function(self, ctx)
-            return { '--plugin', 'prettier-plugin-motoko' }
-          end,
+        mo_fmt = {
+          command = 'mo-fmt',
+          args = { '$FILENAME' },
+          stdin = false,
         },
       },
     },
