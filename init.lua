@@ -584,9 +584,9 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {};
+      local servers = {}
       if vim.fn.executable 'npm' == 1 then
-        servers.motoko_lsp = {};
+        servers.motoko_lsp = {}
 
         servers.tsserver = {
           init_options = {
@@ -598,7 +598,7 @@ require('lazy').setup({
               },
             },
           },
-        };
+        }
         servers.volar = {
           filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
           init_options = {
@@ -606,11 +606,11 @@ require('lazy').setup({
               hybridMode = false,
             },
           },
-        };
+        }
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
-        servers.rust_analyzer = {};
+        servers.rust_analyzer = {}
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -621,20 +621,20 @@ require('lazy').setup({
         --
       end
 
-        servers.lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+      servers.lua_ls = {
+        -- cmd = {...},
+        -- filetypes = { ...},
+        -- capabilities = {},
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = 'Replace',
             },
+            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+            -- diagnostics = { disable = { 'missing-fields' } },
           },
-        };
+        },
+      }
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -980,12 +980,12 @@ require('lazy').setup({
 local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
 parser_config.motoko = {
   install_info = {
-    url = '/workspace/poly/tree-sitter-motoko', -- local path or git repo
+    url = 'https://github.com/f0i/tree-sitter-motoko', -- local path or git repo
     files = { 'src/parser.c', 'src/scanner.c' }, -- note that some parsers also require src/scanner.c or src/scanner.cc
     -- optional entries:
     branch = 'main', -- default branch in case of git repo if different from master
     generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-    requires_generate_from_grammar = true, -- if folder contains pre-generated src/parser.c
+    requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
   },
   --filetype = "mo", -- if filetype does not match the parser name
 }
@@ -1002,9 +1002,9 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 require('luasnip.loaders.from_vscode').load { paths = { '~/.config/nvim/snippets' } }
 
-vim.filetype.add({
-        extension = { keymap = 'c' }
-})
- 
+vim.filetype.add {
+  extension = { keymap = 'c' },
+}
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
