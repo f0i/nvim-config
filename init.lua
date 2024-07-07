@@ -835,6 +835,8 @@ require('lazy').setup({
     end,
   },
 
+  { 'github/copilot.vim' },
+
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -872,7 +874,7 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      --require('mini.surround').setup()
 
       -- Automatically add closing brackets, quotes, etc.
       -- TODO: only add closing character if the opening one is followed by a whitespace
