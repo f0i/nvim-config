@@ -429,7 +429,7 @@ require('lazy').setup({
   },
 
   { -- LSP Configuration & Plugins
-    'f0i/nvim-lspconfig',
+    'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
@@ -518,6 +518,8 @@ require('lazy').setup({
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
+          vim.keymap.set('n', '<leader>r', ':LspRestart', { desc = 'Restart LSP' })
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -835,7 +837,7 @@ require('lazy').setup({
     end,
   },
 
-  { 'github/copilot.vim' },
+  --{ 'github/copilot.vim' },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
