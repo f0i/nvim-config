@@ -167,6 +167,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', 'gp', '<cmd>e %:h<CR>', { desc = '[G]oto [P]arent directory' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -563,7 +564,7 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
 
-          vim.keymap.set('n', '<leader>r', ':LspRestart', { desc = 'Restart LSP' })
+          vim.keymap.set('n', '<leader>cr', ':LspRestart', { desc = 'Restart LSP' })
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -634,7 +635,7 @@ require('lazy').setup({
       if vim.fn.executable 'npm' == 1 then
         servers.motoko_lsp = {}
 
-        servers.tsserver = {
+        servers.ts_ls = {
           init_options = {
             plugins = {
               {
@@ -753,11 +754,11 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { "prettierd", "prettier", stop_after_first = true },
-        typescript = { 'prettierd', 'prettier' , stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier' , stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier' , stop_after_first = true },
-        json = { { 'prettierd', 'prettier' } },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
         motoko = { 'mo_fmt' },
       },
       formatters = {
