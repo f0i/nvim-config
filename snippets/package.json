@@ -1,0 +1,13 @@
+{
+  "name": "motoko-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "motoko"
+        ],
+        "path": "./motoko.json"
+      }
+    ]
+  }
+}

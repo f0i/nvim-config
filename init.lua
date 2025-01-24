@@ -453,7 +453,7 @@ require('lazy').setup({
 
       -- Shortcut for searching your keyboard configuration files
       vim.keymap.set('n', '<leader>fy', function()
-        builtin.find_files { cwd = '/home/ma/projects/glove80/config' }
+        builtin.find_files { cwd = vim.fn.expand '~/projects/glove80/config' }
       end, { desc = '[S]earch ke[Y]board files' })
     end,
   },
@@ -646,7 +646,7 @@ require('lazy').setup({
       if vim.fn.executable 'npm' == 1 then
         servers.motoko_lsp = {}
 
-        servers.tsserver = {
+        servers.ts_ls = {
           init_options = {
             plugins = {
               {
@@ -802,7 +802,7 @@ require('lazy').setup({
           {
             'rafamadriz/friendly-snippets',
             config = function()
-              require('luasnip.loaders.from_vscode').lazy_load { paths = { '~/.config/nvim/snippets' } }
+              require('luasnip.loaders.from_vscode').lazy_load { paths = { vim.fn.expand '~/.config/nvim/snippets' } }
             end,
           },
         },
@@ -1048,6 +1048,8 @@ require('lazy').setup({
   },
 })
 
+vim.filetype.add { extension = { mo = 'motoko' } }
+
 local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
 parser_config.motoko = {
   install_info = {
@@ -1058,10 +1060,7 @@ parser_config.motoko = {
     generate_requires_npm = false, -- if stand-alone parser without npm dependencies
     requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
   },
-  --filetype = "mo", -- if filetype does not match the parser name
 }
-
-vim.filetype.add { extension = { mo = 'motoko' } }
 
 -- The following will add the additional suffixes, so imports without .mo can be followed with `gf`
 vim.api.nvim_create_autocmd('FileType', {
@@ -1071,7 +1070,6 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt.suffixesadd = '.mo'
   end,
 })
--- require('luasnip.loaders.from_vscode').load { paths = { '~/.config/nvim/snippets/' } }
 
 vim.filetype.add {
   extension = { keymap = 'c' },
