@@ -646,7 +646,7 @@ require('lazy').setup({
       if vim.fn.executable 'npm' == 1 then
         servers.motoko_lsp = {}
 
-        servers.ts_ls = {
+        servers.tsserver = {
           init_options = {
             plugins = {
               {
