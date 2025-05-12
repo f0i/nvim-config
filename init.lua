@@ -1053,8 +1053,8 @@ vim.filetype.add { extension = { mo = 'motoko' } }
 local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
 parser_config.motoko = {
   install_info = {
-    url = 'https://github.com/f0i/tree-sitter-motoko', -- local path or git repo
-    files = { 'src/parser.c', 'src/scanner.c' }, -- note that some parsers also require src/scanner.c or src/scanner.cc
+    url = 'https://github.com/christoph-dfinity/tree-sitter-motoko', -- local path or git repo
+    files = { 'src/parser.c' }, -- note that some parsers also require src/scanner.c or src/scanner.cc
     -- optional entries:
     branch = 'main', -- default branch in case of git repo if different from master
     generate_requires_npm = false, -- if stand-alone parser without npm dependencies
