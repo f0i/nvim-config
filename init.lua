@@ -657,14 +657,14 @@ require('lazy').setup({
             },
           },
         }
-        servers.volar = {
-          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-          init_options = {
-            vue = {
-              hybridMode = false,
-            },
-          },
-        }
+        -- servers.volar = {
+        --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        --   init_options = {
+        --     vue = {
+        --       hybridMode = false,
+        --     },
+        --   },
+        -- }
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -897,7 +897,7 @@ require('lazy').setup({
     end,
   },
 
-  --{ 'github/copilot.vim' },
+  { 'github/copilot.vim' },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
